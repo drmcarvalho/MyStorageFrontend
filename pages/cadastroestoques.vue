@@ -45,10 +45,13 @@ export default {
           data: this.model,
         })
 
-        this.model.identification = ''
+        this.redirect()
       }
       catch (error) { alert(error) }
     },
+    redirect() {
+      this.$router.push({ name: 'estoques' })
+    }
   },
 }
 </script>

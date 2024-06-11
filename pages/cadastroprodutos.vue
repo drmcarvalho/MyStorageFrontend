@@ -54,11 +54,13 @@ export default {
           data: this.model,
         })
 
-        this.model.name = ''
-        this.model.price = ''
+        this.redirect()
       }
       catch (error) { alert(error) }
     },
+    redirect() {
+      this.$router.push({ name: 'produtos' })
+    }
   },
 }
 </script>
