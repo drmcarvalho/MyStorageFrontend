@@ -11,10 +11,10 @@
     <v-card-item>
       <v-sheet class="mx-auto" width="800">
         <v-form fast-fail @submit.prevent>
-          <v-select v-model="model.productId" :items="produtosComboBox" item-text="productName" item-value="productId" label="Produto" />
-          <v-select v-model="model.storageId" :items="estoquesComboBox" item-text="identification" item-value="storageId" label="Estoque" />
-          <v-select v-model="model.type" :items="[{ key: 'Entrada', value: 'E' }, { key: 'Saida', value: 'S' }]" item-text="key" item-value="value" label="Tipo de movimentação E/S" />
-          <v-text-field v-model="model.amount" label="Quantidade"></v-text-field>
+          <v-select v-model="model.productId" :items="produtosComboBox" item-text="productName" item-value="productId" label="Produto" :rules="produtoRegras" />
+          <v-select v-model="model.storageId" :items="estoquesComboBox" item-text="identification" item-value="storageId" label="Estoque" :rules="estoqueRegras"/>
+          <v-select v-model="model.type" :items="[{ key: 'Entrada', value: 'E' }, { key: 'Saida', value: 'S' }]" item-text="key" item-value="value" label="Tipo de movimentação E/S" :rules="tipoRegras" />
+          <v-text-field v-model="model.amount" label="Quantidade" :rules="quantidadeRegras"></v-text-field>
           <v-btn class="mt-2" type="submit" @click="submit" block>Efetuar movimentação</v-btn>
         </v-form>
       </v-sheet>
@@ -32,6 +32,34 @@ export default {
       type: '',
       amount: ''
     },
+    produtoRegras: [
+      value => {
+        if (!!value) return true
+
+        return 'Selecione o produto'
+      }
+    ],
+    estoqueRegras: [
+      value => {
+        if (!!value) return true
+
+        return 'Selecione o estoque'
+      }
+    ],
+    tipoRegras: [
+      value => {
+        if (!!value) return true
+
+        return 'Selecione o tipo de movimentação'
+      }
+    ],
+    quantidadeRegras: [
+      value => {
+        if (value > 0) return true
+
+        return 'Quantidade deve ser acima de 0.'
+      },
+    ],
     produtosComboBox: [],
     estoquesComboBox: [],
   }),
@@ -46,12 +74,11 @@ export default {
           data: this.model,
         })
 
-        this.model.productId = ''
-        this.model.storageId = ''
-        this.model.type = ''
-        this.model.amount = ''
+        this.redirect()
       }
-      catch (error) { alert(error) }
+      catch (error) {
+        alert(error)
+      }
     },
     async obterEstoques() {
       try {
@@ -74,6 +101,9 @@ export default {
       } catch (error) {
         return alert(error)
       }
+    },
+    redirect() {
+      this.$router.push({ name: 'movimentacoes' })
     }
   },
   mounted() {
