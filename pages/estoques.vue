@@ -14,17 +14,24 @@
       </v-card-subtitle>
     </v-card-item>
     <v-card-item>
-      <v-data-table :headers="headers" :items="estoques" item-key="storageId"></v-data-table>
+      <v-data-table :headers="headers" :items="estoques" item-key="storageId">
+        <template v-slot:item.controls="props">
+          <v-btn class="mx-2" fab dark small color="blue" @click="editar(props)">
+            <v-icon dark>mdi-pencil</v-icon>
+          </v-btn>
+        </template>
+      </v-data-table>
     </v-card-item>
   </v-card>
 </template>
 
 <script>
 export default {
-  name:'Estoques',
+  name: 'Estoques',
   data: () => ({
     headers: [
-      { text: 'Identificação do estoque', title: 'Identificação do estoque', value: 'identification', },
+      { text: 'Identificação do estoque', title: 'Identificação do estoque', value: 'identification' },
+      { text: "", value: "controls", sortable: false }
     ],
     estoques: []
   }),
@@ -40,9 +47,12 @@ export default {
         return alert(error)
       }
     },
+    editar(row) {
+      this.$router.push({ path: `estoque/${row.item.storageId}` })
+    }
   },
   mounted() {
     this.obterEstoques()
-  }
+  },
 }
 </script>
