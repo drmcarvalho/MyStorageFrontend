@@ -43,9 +43,11 @@ export default {
           data: this.model,
         })
 
-        this.$route.push({ name: 'estoques' })
+        this.$router.push({ name: 'estoques' })
       }
-      catch (error) { console.log(error) }
+      catch (error) {
+        console.log(error)
+      }
     },
     async obterEstoque() {
       try {

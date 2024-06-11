@@ -15,6 +15,11 @@
     </v-card-item>
     <v-card-item>
       <v-data-table :headers="headers" :items="produtos" item-key="productId">
+        <template v-slot:item.edit="props">
+          <v-btn class="mx-2" fab dark small color="blue" @click="editar(props)">
+            <v-icon dark>mdi-pencil</v-icon>
+          </v-btn>
+        </template>
         <template v-slot:item.delete="props">
           <v-btn class="mx-2" fab dark small color="red" @click="deletar(props)">
             <v-icon dark>mdi-delete</v-icon>
@@ -34,7 +39,8 @@ export default {
       { text: 'Preço', title: 'Preço', value: 'price', },
       { text: 'Saldo total em estoque', title: 'Saldo total em estoque', value: 'stockBalance', },
       { text: 'Estocado em', title: 'Estocado em', value: 'storages' },
-      { text: "", value: "delete", sortable: false }
+      { text: "", value: "delete", sortable: false },
+      { text: "", value: "edit", sortable: false }
     ],
     produtos: [],
   }),
@@ -64,6 +70,9 @@ export default {
     },
     async deletar(row) {
       this.deletarProduto(row.item.productId)
+    },
+    editar(row) {
+      this.$router.push({ path: `produto/${row.item.productId}` })
     }
   },
   mounted() {
