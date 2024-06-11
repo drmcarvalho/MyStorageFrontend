@@ -14,6 +14,7 @@
       </v-card-subtitle>
     </v-card-item>
     <v-card-item>
+      <v-text-field label="Digite algo em seguida tecle enter para pesquisar" v-model="query" @keydown.enter="pesquisar" ></v-text-field>
       <v-data-table :headers="headers" :items="estoques" item-key="storageId">
         <template v-slot:item.controls="props">
           <v-btn class="mx-2" fab dark small color="blue" @click="editar(props)">
@@ -33,7 +34,8 @@ export default {
       { text: 'Identificação do estoque', title: 'Identificação do estoque', value: 'identification' },
       { text: "", value: "controls", sortable: false }
     ],
-    estoques: []
+    estoques: [],
+    query: "",
   }),
   methods: {
     async obterEstoques() {
@@ -49,6 +51,26 @@ export default {
     },
     editar(row) {
       this.$router.push({ path: `estoque/${row.item.storageId}` })
+    },
+    async pesquisar(event) {
+      event.preventDefault()
+      if (this.query.length == 0) {
+        this.obterEstoques()
+        return
+      }
+      try {
+        const response = await this.$axios({
+          method: "GET",
+          url: '/StorageManager/Storage/Query',
+          params: {
+            q: this.query
+          }
+        })
+
+        this.estoques = response.data
+      } catch(error) {
+        alert(error)
+      }
     }
   },
   mounted() {
