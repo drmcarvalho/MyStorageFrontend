@@ -28,6 +28,7 @@ export default {
       { text: 'Estoque', title: 'Estoque', value: 'storageName', },
       { text: 'Quantidade movimentada', title: 'Quantidade movimentada', value: 'amount', },
       { text: 'Tipo de movimentação', title: 'Tipo de movimentação', value: 'type', },
+      { text: 'Data e hora da movimentação', title: 'Data e hora da movimentação', value: 'movementDateFormatted', },
     ],
     movimentacoes: [],
   }),
