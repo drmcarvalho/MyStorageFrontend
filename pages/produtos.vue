@@ -14,7 +14,13 @@
       </v-card-subtitle>
     </v-card-item>
     <v-card-item>
-      <v-data-table :headers="headers" :items="produtos" item-key="productId"></v-data-table>
+      <v-data-table :headers="headers" :items="produtos" item-key="productId">
+        <template v-slot:item.delete="props">
+          <v-btn class="mx-2" fab dark small color="red" @click="deletar(props)">
+            <v-icon dark>mdi-delete</v-icon>
+          </v-btn>
+        </template>
+      </v-data-table>
     </v-card-item>
   </v-card>
 </template>
@@ -27,7 +33,8 @@ export default {
       { text: 'Descrição', title: 'Descrição', value: 'productName', },
       { text: 'Preço', title: 'Preço', value: 'price', },
       { text: 'Saldo total em estoque', title: 'Saldo total em estoque', value: 'stockBalance', },
-      { text: 'Estocado em', title: 'Estocado em', value: 'storages' }
+      { text: 'Estocado em', title: 'Estocado em', value: 'storages' },
+      { text: "", value: "delete", sortable: false }
     ],
     produtos: [],
   }),
@@ -42,6 +49,21 @@ export default {
       } catch (error) {
         return alert(error)
       }
+    },
+    async deletarProduto(productId) {
+      try {
+        await this.$axios({
+          method: 'DELETE',
+          url: `/Product/Delete/${productId}`
+        })
+
+        this.obterProdutos()
+      } catch (error) {
+        alert(error)
+      }
+    },
+    async deletar(row) {
+      this.deletarProduto(row.item.productId)
     }
   },
   mounted() {
