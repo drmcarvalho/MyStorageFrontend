@@ -32,6 +32,7 @@ export default {
   data: () => ({
     headers: [
       { text: 'Identificação do estoque', title: 'Identificação do estoque', value: 'identification' },
+      { text: 'Saldo total do estoque', title: 'Saldo total do estoque', value: 'balanceTotal' },
       { text: "", value: "controls", sortable: false }
     ],
     estoques: [],
