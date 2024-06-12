@@ -14,6 +14,7 @@
       </v-card-subtitle>
     </v-card-item>
     <v-card-item>
+      <v-text-field label="Digite algo em seguida tecle enter para pesquisar" v-model="query" @keydown.enter="pesquisar" ></v-text-field>
       <v-data-table :headers="headers" :items="movimentacoes" item-key="movementId"></v-data-table>
     </v-card-item>
   </v-card>
@@ -31,6 +32,7 @@ export default {
       { text: 'Data e hora da movimentação', title: 'Data e hora da movimentação', value: 'movementDateFormatted', },
     ],
     movimentacoes: [],
+    query: ''
   }),
   methods: {
     async obterHistoricoMovimentacoes() {
@@ -43,7 +45,27 @@ export default {
       } catch (error) {
         return alert(error)
       }
-    }
+    },
+    async pesquisar(event) {
+      event.preventDefault()
+      if (this.query.length == 0) {
+        this.obterHistoricoMovimentacoes()
+        return
+      }
+      try {
+        const response = await this.$axios({
+          method: "GET",
+          url: '/StorageManager/Movement/Query',
+          params: {
+            q: this.query
+          }
+        })
+
+        this.movimentacoes = response.data
+      } catch(error) {
+        alert(error)
+      }
+    },
   },
   mounted() {
     this.obterHistoricoMovimentacoes()
