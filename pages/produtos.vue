@@ -14,6 +14,7 @@
       </v-card-subtitle>
     </v-card-item>
     <v-card-item>
+      <v-text-field label="Digite algo em seguida tecle enter para pesquisar" v-model="query" @keydown.enter="pesquisar" ></v-text-field>
       <v-data-table :headers="headers" :items="produtos" item-key="productId">
         <template v-slot:item.edit="props">
           <v-btn class="mx-2" fab dark small color="blue" @click="editar(props)">
@@ -43,6 +44,7 @@ export default {
       { text: "", value: "edit", sortable: false }
     ],
     produtos: [],
+    query: '',
   }),
   methods: {
     async obterProdutos() {
@@ -73,7 +75,27 @@ export default {
     },
     editar(row) {
       this.$router.push({ path: `produto/${row.item.productId}` })
-    }
+    },
+    async pesquisar(event) {
+      event.preventDefault()
+      if (this.query.length == 0) {
+        this.obterProdutos()
+        return
+      }
+      try {
+        const response = await this.$axios({
+          method: "GET",
+          url: '/Product/Query',
+          params: {
+            q: this.query
+          }
+        })
+
+        this.produtos = response.data
+      } catch(error) {
+        alert(error)
+      }
+    },
   },
   mounted() {
     this.obterProdutos()
