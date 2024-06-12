@@ -63,7 +63,6 @@ export default {
     produtosComboBox: [],
     estoquesComboBox: [],
   }),
-
   methods: {
     async submit() {
 
